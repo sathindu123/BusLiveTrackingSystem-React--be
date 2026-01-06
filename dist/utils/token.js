@@ -7,21 +7,23 @@ exports.signRefreshToken = exports.signAccessToken = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 dotenv_1.default.config();
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const ACCESS_TOKEN_SECRET = process.env.JWT_SECRET;
+const REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_SECRET;
 const signAccessToken = (user) => {
+    console.log("ACCESS_TOKEN_SECRET =", ACCESS_TOKEN_SECRET);
+    console.log("USER ID =", user?._id);
     return jsonwebtoken_1.default.sign({
         sub: user._id.toString(),
-        busnb: user.busNb,
+        username: user.username,
     }, ACCESS_TOKEN_SECRET, {
         expiresIn: "15m",
     });
 };
 exports.signAccessToken = signAccessToken;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const signRefreshToken = (user) => {
     return jsonwebtoken_1.default.sign({
         sub: user._id.toString(),
-        busnb: user.busNb,
+        username: user.username,
     }, REFRESH_TOKEN_SECRET, {
         expiresIn: "7d",
     });

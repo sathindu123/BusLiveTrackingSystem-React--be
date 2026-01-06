@@ -25,7 +25,7 @@ const userRegister = async (req, res) => {
         const newUser = new user_modle_1.User({
             busNb,
             username,
-            password,
+            password: hashedpassword,
             telNb
         });
         await newUser.save();
@@ -42,16 +42,26 @@ const login = async (req, res) => {
     console.log("ji");
     try {
         const { username, password } = req.body;
+        console.log(username);
+        console.log(":p", password);
+        console.log("hiad");
         const exitsingBus = await user_modle_1.User.findOne({ username });
+        console.log("hdia");
         if (!exitsingBus) {
+            console.log("hia");
             return res.status(401).json({ message: "Invalid credentials" });
         }
         const valid = await bcryptjs_1.default.compare(password, exitsingBus.password);
+        console.log("hiads");
         if (!valid) {
-            return res.status(401).json({ message: "Invalid credentials" });
+            console.log("hidsfa");
+            return res.status(401).json({ message: "Invalid credensssstials" });
         }
+        console.log("hjhgjia");
         const accessToken = (0, token_1.signAccessToken)(exitsingBus);
+        console.log("mok");
         const refreshToken = (0, token_1.signRefreshToken)(exitsingBus);
+        console.log("hiae");
         res.status(200).json({
             message: "success",
             data: {

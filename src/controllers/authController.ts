@@ -27,7 +27,7 @@ export const userRegister = async (req: Request, res: Response) => {
         const newUser = new User({
             busNb,
             username,
-            password,
+            password: hashedpassword,
             telNb
         })
 
@@ -42,10 +42,8 @@ export const userRegister = async (req: Request, res: Response) => {
 }
 
 export const login = async (req: Request, res: Response) => {
-    console.log("ji")
     try{
         const { username, password} = req.body
-
         const exitsingBus = await User.findOne({ username })
         if (!exitsingBus) {
             return res.status(401).json({ message: "Invalid credentials" })
@@ -54,8 +52,10 @@ export const login = async (req: Request, res: Response) => {
         if (!valid) {
             return res.status(401).json({ message: "Invalid credensssstials" })
         }
+  
         const accessToken = signAccessToken(exitsingBus)
         const refreshToken = signRefreshToken(exitsingBus)
+
 
         res.status(200).json({
             message: "success",
