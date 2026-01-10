@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { User } from "../models/user.modle";
+import { IUser, User } from "../models/user.modle";
 import { signAccessToken, signRefreshToken } from "../utils/token"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
+import { AuthRequest } from "../middleware/authMiddleware";
 dotenv.config()
 
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET as string
@@ -86,4 +87,24 @@ export const handleRefreshToken = async (req: Request, res:Response) => {
   }catch(err){
     res.status(403).json({message: "invalid expire token"})
   }
+}
+
+export const getMyDetails = async (req: AuthRequest, res: Response) => {
+ 
+  const userId = req.user.sub
+  const user =
+    ((await User.findById(userId).select("-password")) as IUser) || null
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found"
+    })
+  }
+
+  const { busNb, username, password, telNb} = user
+
+  res.status(200).json({
+    message: "Ok",
+    data: { busNb, username, password, telNb}
+  })
 }

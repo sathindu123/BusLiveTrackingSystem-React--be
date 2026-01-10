@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleRefreshToken = exports.login = exports.userRegister = void 0;
+exports.getMyDetails = exports.handleRefreshToken = exports.login = exports.userRegister = void 0;
 const user_modle_1 = require("../models/user.modle");
 const token_1 = require("../utils/token");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
@@ -39,29 +39,18 @@ const userRegister = async (req, res) => {
 };
 exports.userRegister = userRegister;
 const login = async (req, res) => {
-    console.log("ji");
     try {
         const { username, password } = req.body;
-        console.log(username);
-        console.log(":p", password);
-        console.log("hiad");
         const exitsingBus = await user_modle_1.User.findOne({ username });
-        console.log("hdia");
         if (!exitsingBus) {
-            console.log("hia");
             return res.status(401).json({ message: "Invalid credentials" });
         }
         const valid = await bcryptjs_1.default.compare(password, exitsingBus.password);
-        console.log("hiads");
         if (!valid) {
-            console.log("hidsfa");
             return res.status(401).json({ message: "Invalid credensssstials" });
         }
-        console.log("hjhgjia");
         const accessToken = (0, token_1.signAccessToken)(exitsingBus);
-        console.log("mok");
         const refreshToken = (0, token_1.signRefreshToken)(exitsingBus);
-        console.log("hiae");
         res.status(200).json({
             message: "success",
             data: {
@@ -93,3 +82,18 @@ const handleRefreshToken = async (req, res) => {
     }
 };
 exports.handleRefreshToken = handleRefreshToken;
+const getMyDetails = async (req, res) => {
+    const userId = req.user.sub;
+    const user = (await user_modle_1.User.findById(userId).select("-password")) || null;
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found"
+        });
+    }
+    const { busNb, username, password, telNb } = user;
+    res.status(200).json({
+        message: "Ok",
+        data: { busNb, username, password, telNb }
+    });
+};
+exports.getMyDetails = getMyDetails;

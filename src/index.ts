@@ -3,6 +3,8 @@ import cors from "cors"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import authRouter from "./routes/authRouter";
+import driverProfileRoutes from "./routes/DriverProfileRoutes";
+import busRoute from "./routes/busRoute";
 dotenv.config()
 
 const SERVER_PORT = process.env.SERVER_PORT
@@ -20,6 +22,8 @@ app.use(
 
 
 app.use("/api/v1/auth", authRouter)
+app.use("/api/v1/auth", driverProfileRoutes)
+app.use("/api/v1/auth", busRoute)
 
 
 app.use('/', (req, res) => {

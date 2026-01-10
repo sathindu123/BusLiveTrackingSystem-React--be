@@ -7,5 +7,5 @@ const router = (0, express_1.Router)();
 router.post("/register", authController_1.userRegister);
 router.post("/login", authController_1.login);
 router.post("/refresh", authController_1.handleRefreshToken);
-router.get("/me", authMiddleware_1.authenticate);
+router.get("/me", authMiddleware_1.authenticate, authController_1.getMyDetails);
 exports.default = router;

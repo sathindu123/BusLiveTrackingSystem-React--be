@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getMyDetails,
   handleRefreshToken,
   login,
   userRegister,
@@ -12,7 +13,7 @@ router.post("/register", userRegister)
 router.post("/login", login)
 
 router.post("/refresh", handleRefreshToken)
-router.get("/me", authenticate)
+router.get("/me", authenticate, getMyDetails)
 
 
 export default router

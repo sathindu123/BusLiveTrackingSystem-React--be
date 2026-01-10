@@ -16,7 +16,7 @@ const signAccessToken = (user) => {
         sub: user._id.toString(),
         username: user.username,
     }, ACCESS_TOKEN_SECRET, {
-        expiresIn: "15m",
+        expiresIn: "60m",
     });
 };
 exports.signAccessToken = signAccessToken;

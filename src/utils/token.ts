@@ -16,7 +16,7 @@ export const signAccessToken = (user: IUser): string => {
     },
     ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "15m",
+      expiresIn: "60m",
     }
   );
 };

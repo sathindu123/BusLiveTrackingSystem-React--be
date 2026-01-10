@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
+const ACCESS_TOKEN_SECRET = process.env.JWT_SECRET as string;
 
 export interface AuthRequest extends Request {
   user?: any; 
@@ -28,3 +28,4 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
     res.status(401).json({ message: 'Invalid or expired token' })
   }
 }
+
