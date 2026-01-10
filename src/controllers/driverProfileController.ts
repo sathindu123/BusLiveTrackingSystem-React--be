@@ -50,7 +50,6 @@ export const saveProfile = async (req: Request, res: Response) => {
 
 export const getDriverProfileDetails = async (req: Request, res: Response) => {
   try {
-    console.log("mokd wenne")
     const buscode = req.query.busCode as string; // capital C match කරන්න
   
     if (!buscode) {
@@ -58,6 +57,26 @@ export const getDriverProfileDetails = async (req: Request, res: Response) => {
     }
 
     const route = await Driver.findOne({ buscode: buscode }); // database field name: buscode
+    if (!route) {
+      return res.status(404).json({ message: "Route not found" });
+    }
+
+    res.status(200).json({ message: "Ok", data: route });
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const getrouteDetails = async (req: Request, res: Response) => {
+  try {
+    const endstation = req.query.endstation as string; 
+  
+    if (!endstation) {
+      return res.status(400).json({ message: "not availble to toute" });
+    }
+
+    const route = await Route.findOne({ endstation: endstation }); 
     if (!route) {
       return res.status(404).json({ message: "Route not found" });
     }

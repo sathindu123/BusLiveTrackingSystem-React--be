@@ -3,9 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDriverProfileDetails = exports.saveProfile = void 0;
+exports.getrouteDetails = exports.getDriverProfileDetails = exports.saveProfile = void 0;
 const driver_modle_1 = require("../models/driver.modle");
 const dotenv_1 = __importDefault(require("dotenv"));
+const routeDetails_model_1 = require("../models/routeDetails.model");
 dotenv_1.default.config();
 const saveProfile = async (req, res) => {
     try {
@@ -45,7 +46,6 @@ const saveProfile = async (req, res) => {
 exports.saveProfile = saveProfile;
 const getDriverProfileDetails = async (req, res) => {
     try {
-        console.log("mokd wenne");
         const buscode = req.query.busCode; // capital C match කරන්න
         if (!buscode) {
             return res.status(400).json({ message: "Bus code is required" });
@@ -61,3 +61,20 @@ const getDriverProfileDetails = async (req, res) => {
     }
 };
 exports.getDriverProfileDetails = getDriverProfileDetails;
+const getrouteDetails = async (req, res) => {
+    try {
+        const endstation = req.query.endstation;
+        if (!endstation) {
+            return res.status(400).json({ message: "not availble to toute" });
+        }
+        const route = await routeDetails_model_1.Route.findOne({ endstation: endstation });
+        if (!route) {
+            return res.status(404).json({ message: "Route not found" });
+        }
+        res.status(200).json({ message: "Ok", data: route });
+    }
+    catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+exports.getrouteDetails = getrouteDetails;
